@@ -45,6 +45,26 @@ RUN /bin/chown -R $USER:$USER /mnt/volumes/container \
 # ╰――――――――――――――――――――╯
 # RUN /sbin/apk add --no-cache build-base git libffi-dev linux-headers mysql python3-dev py3-pip py3-setuptools
 RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server
+RUN mkdir -p /etc/rabbitmq
+# RUN touch /etc/rabbitmq/rabbitmq.conf
+
+RUN /bin/ln -svf /etc/container/erlang.cookie /home/$USER/.erlang.cookie \
+  && /bin/ln -svf /mnt/volumes/configmaps/erlang.cookie /etc/container/erlang.cookie \
+  && /bin/ln -svf /mnt/volumes/container/erlang.cookie /mnt/volumes/configmaps/erlang.cookie
+
+RUN /bin/ln -svf /etc/container/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf \
+  && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq.conf /etc/container/rabbitmq.conf \
+  && /bin/ln -svf /mnt/volumes/container/rabbitmq.conf /mnt/volumes/configmaps/rabbitmq.conf
+
+RUN /bin/ln -svf /etc/container/rabbitmq-env.conf /etc/rabbitmq/rabbitmq-env.conf \
+  && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq-env.conf /etc/container/rabbitmq-env.conf \
+  && /bin/ln -svf /mnt/volumes/container/rabbitmq-env.conf /mnt/volumes/configmaps/rabbitmq-env.conf
+
+
+# RUN ls -l /var/lib/rabbitmq/mnesia && /bin/rmdir /var/lib/rabbitmq \
+#  && /bin/ln -svf /mnt/volumes/container/broker /var/lib/rabbitmq
+  
+RUN /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_management
 # RUN mkdir -p /run/mysqld
 # RUN chown $USER:$USER -R /run/mysqld
 # RUN /bin/mv /etc/my.cnf.d/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf~ \

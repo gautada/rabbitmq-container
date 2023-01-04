@@ -12,7 +12,7 @@ services:
         - "rabbitmq:dev"
     image: "rabbitmq:dev"
     ports:
-      - "8888:8888"
+      - "15672:15672"
     volumes:
       - "container:/mnt/volumes/container"
       - "backup:/mnt/volumes/backup"

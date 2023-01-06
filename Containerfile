@@ -45,8 +45,19 @@ RUN /bin/chown -R $USER:$USER /mnt/volumes/container \
 # ╰――――――――――――――――――――╯
 # RUN /sbin/apk add --no-cache build-base git libffi-dev linux-headers mysql python3-dev py3-pip py3-setuptools
 RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server py3-pip
-RUN mkdir -p /etc/rabbitmq
-# RUN touch /etc/rabbitmq/rabbitmq.conf
+RUN apk add --no-cache py3-pip py3-requests py3-yaml
+RUN pip install fastapi
+RUN pip install "uvicorn[standard]"
+RUN pip install python-multipart
+
+RUN mkdir -p /etc/rabbitmq/conf.d
+# COPY default.conf /etc/container/default.conf
+RUN /bin/ln -svf /etc/container/default.conf /etc/rabbitmq/conf.d/default.conf \
+ && /bin/ln -svf /mnt/volumes/configmaps/default.conf /etc/container/default.conf \
+ && /bin/ln -svf /mnt/volumes/container/default.conf /mnt/volumes/configmaps/default.conf
+ 
+# RUN sed "s/default_password/$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 64 | shasum | shasum | base64 | head -c 20)/" /etc/rabbitmq/conf.d/default.conf >
+
 
 RUN /bin/ln -svf /etc/container/erlang.cookie /home/$USER/.erlang.cookie \
   && /bin/ln -svf /mnt/volumes/configmaps/erlang.cookie /etc/container/erlang.cookie \
@@ -64,7 +75,8 @@ RUN /bin/ln -svf /etc/container/rabbitmq-env.conf /etc/rabbitmq/rabbitmq-env.con
 RUN /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_management
 RUN pip3 install pika
 RUN ln -s /mnt/volumes/container/scripts /home/$USER/scripts
-
+RUN /bin/mkdir -p /opt/rabbit/mnesia \
+ && /bin/chown $USER:$USER /opt/rabbit/mnesia
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
 # ╰――――――――――――――――――――╯

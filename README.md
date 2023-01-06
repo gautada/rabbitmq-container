@@ -20,3 +20,9 @@ rabbitmqctl set_user_tags test administrator
 
 docker exec -it $(docker ps -q) /bin/ash
 
+docker rm "$(docker ps -a | grep $(pwd | awk -F'/' '{print $NF}') | awk -F ' ' '{print $1}')"
+n
+
+# rabbitmqctl set_user_tags rabbit administrator && rabbitmqctl set_permissions -p "/" "rabbit" ".*" ".*" ".*"
+ 
+# rabbitmqctl add_user rabbit rabbit && rabbitmqctl set_user_tags rabbit administrator && rabbitmqctl set_permissions -p "/" "rabbit" ".*" ".*" ".*"

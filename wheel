@@ -1,3 +1,4 @@
 %wheel         ALL = (ALL) NOPASSWD: /usr/sbin/rabbitmq-plugins
 %wheel         ALL = (ALL) NOPASSWD: /usr/bin/nano
+# %wheel         ALL = (ALL) NOPASSWD: /bin/chown
 

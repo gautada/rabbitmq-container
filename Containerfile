@@ -44,7 +44,7 @@ RUN /bin/chown -R $USER:$USER /mnt/volumes/container \
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
 # RUN /sbin/apk add --no-cache build-base git libffi-dev linux-headers mysql python3-dev py3-pip py3-setuptools
-RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server
+RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server py3-pip
 RUN mkdir -p /etc/rabbitmq
 # RUN touch /etc/rabbitmq/rabbitmq.conf
 
@@ -59,21 +59,11 @@ RUN /bin/ln -svf /etc/container/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf \
 RUN /bin/ln -svf /etc/container/rabbitmq-env.conf /etc/rabbitmq/rabbitmq-env.conf \
   && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq-env.conf /etc/container/rabbitmq-env.conf \
   && /bin/ln -svf /mnt/volumes/container/rabbitmq-env.conf /mnt/volumes/configmaps/rabbitmq-env.conf
-
-
-# RUN ls -l /var/lib/rabbitmq/mnesia && /bin/rmdir /var/lib/rabbitmq \
-#  && /bin/ln -svf /mnt/volumes/container/broker /var/lib/rabbitmq
   
+# Note: This command enable RMQ management plugin
 RUN /usr/sbin/rabbitmq-plugins enable --offline rabbitmq_management
-# RUN mkdir -p /run/mysqld
-# RUN chown $USER:$USER -R /run/mysqld
-# RUN /bin/mv /etc/my.cnf.d/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf~ \
-#  && /bin/ln -svf /mnt/volumes/configmaps/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf \
-#  && /bin/ln -svf /mnt/volumes/container/mariadb-server.cnf /mnt/volumes/configmaps/mariadb-server.cnf
-
-
-
-
+RUN pip3 install pika
+RUN ln -s /mnt/volumes/container/scripts /home/$USER/scripts
 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
@@ -82,5 +72,5 @@ USER $USER
 VOLUME /mnt/volumes/backup
 VOLUME /mnt/volumes/configmaps
 VOLUME /mnt/volumes/container
-EXPOSE 3306/tcp
+EXPOSE 5672/tcp 15672/tcp
 WORKDIR /home/$USER

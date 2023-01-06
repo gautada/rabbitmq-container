@@ -4,12 +4,19 @@
 
 
 Plugins
-15672
 
 
-# create a user
-rabbitmqctl add_user full_access s3crEt
-# tag the user with "administrator" for full management UI and HTTP API access
-rabbitmqctl set_user_tags full_access administrator
+## Notes
 
-rabbitmqctl add_user test test && rabbitmqctl set_user_tags test administrator
+- Admin iterface is on port 15672 [Development](http://localhost:15672)
+- A user must be created using `rabbitmqctl add_user full_access s3crEt` and granted management access using `rabbitmqctl set_user_tags full_access administrator`; Example: `rabbitmqctl add_user test test && rabbitmqctl set_user_tags test administrator`. 
+
+
+rabbitmqctl --node rabbit@"$(hostname)" add_user test test && rabbitmqctl set_user_tags test administrator
+
+rabbitmqctl add_user test test && rabbitmqctl set_permissions -p "/" "test" ".*" ".*" ".*"
+
+rabbitmqctl set_user_tags test administrator
+
+docker exec -it $(docker ps -q) /bin/ash
+

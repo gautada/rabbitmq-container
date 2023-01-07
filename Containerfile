@@ -29,6 +29,9 @@ COPY wheel  /etc/container/wheel
 # BACKUP:
 COPY backup /etc/container/backup
 
+# VERSION:
+COPY version /usr/bin/version
+
 # ENTRYPOINT:
 RUN rm -v /etc/container/entrypoint
 COPY entrypoint /etc/container/entrypoint
@@ -43,9 +46,10 @@ RUN /bin/chown -R $USER:$USER /mnt/volumes/container \
 # ╭――――――――――――――――――――╮
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
-# RUN /sbin/apk add --no-cache build-base git libffi-dev linux-headers mysql python3-dev py3-pip py3-setuptools
-RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server py3-pip
+RUN /sbin/apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing rabbitmq-server
+
 RUN apk add --no-cache py3-pip py3-requests py3-yaml
+
 RUN pip install fastapi
 RUN pip install "uvicorn[standard]"
 RUN pip install python-multipart

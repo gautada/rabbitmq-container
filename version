@@ -1,0 +1,4 @@
+#!/bin/ash
+
+ /usr/sbin/rabbitmqctl status | /bin/grep "version" | /usr/bin/awk -F ' ' '{print $3}'
+ 

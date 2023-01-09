@@ -1,17 +1,24 @@
 version: "3.9"
 services:
   rabbitmq:
+    dns:
+      - 192.168.4.200
+      - 192.168.4.201
+      - 192.168.4.203
+      - 192.168.4.204
     build:
       args:
         ALPINE_VERSION: "latest"
-        JEKYLL_VERSION: "1.17.3"
       context: .
       dockerfile: Containerfile
       no_cache: true
       tags:
         - "rabbitmq:dev"
     image: "rabbitmq:dev"
+    hostname: "rabbitmq"
     ports:
+      - "8080:8080"
+      - "5672:5672"
       - "15672:15672"
     volumes:
       - "container:/mnt/volumes/container"

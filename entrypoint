@@ -11,28 +11,18 @@ ENTRYPOINT_PARAMS="$@"
 
 APP_NAME="rabbitmq"
 
-
 app_version() {
- /usr/sbin/rabbitmqctl status | /bin/grep "version" | /usr/bin/awk -F ' ' '{print $3}'
+ gc -am /sbin/apk list --installed --no-cache | /bin/grep "$APP_NAME" | /usr/bin/awk -F ' ' '{print $1}' | /usr/bin/awk -F '-' '{print $3}'
 }
 
-/usr/bin/pgrep bean > /dev/null
-TEST=$?
-if [ $TEST -eq 1 ] ; then
- log "-i" "entrypoint" "Launching application - $APP_NAME()"
- /usr/sbin/rabbitmq-server -detached
- /bin/sleep 5s
- /usr/sbin/rabbitmqctl start_app
- log "-i" "entrypoint" "Running application - $APP_NAME($(app_version))"
-fi
-
+log "-i" "entrypoint" "Launch Application - $APP_NAME($(app_version))"
 if [ -z "$@" ] ; then
-  log "-i" "entrypoint" "Blocking application - $APP_NAME($(app_version))"
-  tail -f /dev/null
-  return 1
+ /usr/sbin/rabbitmq-server
+ return 1
 else
- log "-i" "entrypoint" "Override default($ENTRYPOINT_PARAMS)"
- log "-i" "entrypoint" "Detatched application - $APP_NAME(NA)"
- 
- return 0
+  log "-i" "entrypoint" "Launch Application [BACKGROUND]"
+  /usr/sbin/rabbitmq-server -detached
+  log "-i" "entrypoint" "Launch Application [WAIT(5s)]"
+  /bin/sleep 5
+return 0
 fi

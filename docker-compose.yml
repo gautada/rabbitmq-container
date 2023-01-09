@@ -6,6 +6,8 @@ services:
       - 192.168.4.201
       - 192.168.4.203
       - 192.168.4.204
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=AAAAAAAAAAAAAAAAAAAA
     build:
       args:
         ALPINE_VERSION: "latest"

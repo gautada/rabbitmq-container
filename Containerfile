@@ -59,6 +59,10 @@ RUN /bin/ln -svf /etc/container/default.conf /etc/rabbitmq/conf.d/default.conf \
  && /bin/ln -svf /mnt/volumes/configmaps/default.conf /etc/container/default.conf \
  && /bin/ln -svf /mnt/volumes/container/default.conf /mnt/volumes/configmaps/default.conf
  
+ RUN /bin/touch /home/$USER/.erlang.cookie \
+  && chown $USER:$USER /home/$USER/.erlang.cookie 
+ 
+ 
 # RUN sed "s/default_password/$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 64 | shasum | shasum | base64 | head -c 20)/" /etc/rabbitmq/conf.d/default.conf >
 
 # RUN /bin/ln -svf /etc/container/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf \
@@ -75,6 +79,7 @@ RUN pip3 install pika
 RUN ln -s /mnt/volumes/container/scripts /home/$USER/scripts
 RUN /bin/mkdir -p /opt/rabbit/mnesia \
  && /bin/chown $USER:$USER /opt/rabbit/mnesia
+ 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
 # ╰――――――――――――――――――――╯

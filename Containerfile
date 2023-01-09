@@ -55,21 +55,15 @@ RUN pip install "uvicorn[standard]"
 RUN pip install python-multipart
 
 RUN mkdir -p /etc/rabbitmq/conf.d
-# COPY default.conf /etc/container/default.conf
 RUN /bin/ln -svf /etc/container/default.conf /etc/rabbitmq/conf.d/default.conf \
  && /bin/ln -svf /mnt/volumes/configmaps/default.conf /etc/container/default.conf \
  && /bin/ln -svf /mnt/volumes/container/default.conf /mnt/volumes/configmaps/default.conf
  
 # RUN sed "s/default_password/$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 64 | shasum | shasum | base64 | head -c 20)/" /etc/rabbitmq/conf.d/default.conf >
 
-
-# RUN /bin/ln -svf /etc/container/erlang.cookie /home/$USER/.erlang.cookie \
-#  && /bin/ln -svf /mnt/volumes/configmaps/erlang.cookie /etc/container/erlang.cookie \
-#   && /bin/ln -svf /mnt/volumes/container/erlang.cookie /mnt/volumes/configmaps/erlang.cookie
-
-RUN /bin/ln -svf /etc/container/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf \
-  && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq.conf /etc/container/rabbitmq.conf \
-  && /bin/ln -svf /mnt/volumes/container/rabbitmq.conf /mnt/volumes/configmaps/rabbitmq.conf
+# RUN /bin/ln -svf /etc/container/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf \
+#   && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq.conf /etc/container/rabbitmq.conf \
+#   && /bin/ln -svf /mnt/volumes/container/rabbitmq.conf /mnt/volumes/configmaps/rabbitmq.conf
 
 RUN /bin/ln -svf /etc/container/rabbitmq-env.conf /etc/rabbitmq/rabbitmq-env.conf \
   && /bin/ln -svf /mnt/volumes/configmaps/rabbitmq-env.conf /etc/container/rabbitmq-env.conf \

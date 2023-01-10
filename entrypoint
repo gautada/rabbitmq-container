@@ -17,7 +17,9 @@ app_version() {
 
 chmod +w /home/rabbitmq/.erlang.cookie
 ls -l /home/rabbitmq/.erlang.cookie
+echo "$RABBITMQ_ERLANG_COOKIE"
 echo "$RABBITMQ_ERLANG_COOKIE" > /home/rabbitmq/.erlang.cookie
+echo /home/rabbitmq/.erlang.cookie
 
 log "-i" "entrypoint" "Launch Application - $APP_NAME($(app_version))"
 if [ -z "$@" ] ; then

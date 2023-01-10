@@ -59,8 +59,8 @@ RUN /bin/ln -svf /etc/container/default.conf /etc/rabbitmq/conf.d/default.conf \
  && /bin/ln -svf /mnt/volumes/configmaps/default.conf /etc/container/default.conf \
  && /bin/ln -svf /mnt/volumes/container/default.conf /mnt/volumes/configmaps/default.conf
  
- RUN /bin/touch /home/$USER/.erlang.cookie \
-  && chown $USER:$USER /home/$USER/.erlang.cookie 
+# RUN /bin/touch /home/$USER/.erlang.cookie \
+#  && chown $USER:$USER /home/$USER/.erlang.cookie
  
  
 # RUN sed "s/default_password/$(LC_ALL=C tr -dc A-Za-z0-9 </dev/urandom | head -c 64 | shasum | shasum | base64 | head -c 20)/" /etc/rabbitmq/conf.d/default.conf >
